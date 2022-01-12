@@ -3,6 +3,7 @@ from body import Body
 import threading
 import time
 from bullet import Bullet
+from keystorage import KeyStorage
 from pprint import pprint
 
 BODY_BORDER_COLOR = (200,15,25)
@@ -43,85 +44,43 @@ def shoot_th(x, y, mx, my):
         draw.line(sc, (0,0,0), b_line[0], b_line[1], 5)
         display.update()
 
-def key_watch(args):
-    while args["esc"] == False:
-        args["call"]()
-        time.sleep(0.1)
-
-class KeyStorage:
-    def __init__(self, key_bind):
-        self.__key_array = []
-        self.__key_th_arg = {}
-        self.__key_th_arg["esc"] = False
-        self.__key_th = threading.Thread(target=self.__thread, args=(self.__key_th_arg,))
-        self.__key_th.start()
-        self.__key_bind = key_bind
-
-    def add_key(self, key):
-        self.__key_array.append(key)
-        self.__process(key)
-
-    def remove_key(self, key):
-        if self.__key_array.count(key) != 0:
-            self.__key_array.remove(key)
-    
-    def shutdown(self):
-        self.__key_th_arg["esc"] = True
-        self.__key_th.join()
-
-    def __check_keys(self):
-        if len(self.__key_array):
-            for key in self.__key_array:
-                self.__process(key)
-                
-    def __thread(self, args):
-        while args["esc"] == False:
-            self.__check_keys()
-            time.sleep(0.1)
-    
-    def __process(self, key):
-        for k in self.__key_bind:
-            if k == key:
-                self.__key_bind[k]()
-                break
-            
 
 class Display:
     def __init__(self, width, heigh):
         self.__size = (width, heigh)
         self.__bg = (0,0,0)
         self.__sc = display.set_mode((width, heigh))
-    
+
     def set_bg(self, rgb):
         self.__bg = rgb
         self.__sc.fill(self.__bg)
-    
+
     def get_bg(self):
         return self.__bg
-    
+
     def draw_circle(self, coord, radius, color, border):
         draw.circle(self.__sc, color, coord, radius, border)
         display.update()
-    
+
     def hide_circle(self, coord, radius, border):
         draw.circle(self.__sc, self.__bg, coord, radius, border)
         display.update()
-    
+
     def draw_line(self, coor_bgn, coor_end, color, bold):
         draw.line(self.__sc, color, coor_bgn, coor_end, bold)
         display.update()
-    
+
     def hide_line(self, coor_bgn, coor_end, bold):
         draw.line(self.__sc, self.__bg, coor_bgn, coor_end, bold)
         display.update()
- 
+
     def get_size(self):
         return self.__size
-    
+
     #def shooter(self, )
 
 # Main Body
-disp = Display(800, 600)
+disp = Display(1024, 600)
 
 obj = Body(25, disp.get_size(), BODY_BORDER_COLOR, 2)
 key_bindings = {
