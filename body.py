@@ -18,6 +18,10 @@ class Body:
         self.__shooter = None
         self.calc_x2_pos(self.__x2, self.__y2)
 
+    def set_bullet_prm(self, len, width, color):
+        self.bul_len = len
+        self.bul_width = width
+        self.bul_color = color
 
     def set_shooter(self, shooter):
         self.__shooter = shooter
@@ -92,7 +96,7 @@ class Body:
 
     def shoot(self, mx, my):
         if self.__shooter and self.__visible:
-            self.__shooter(self.__y2, self.__x2, mx, my)
+            self.__shooter(self.__y2, self.__x2, mx, my, self.bul_len, self.bul_width, self.bul_color)
 
 
     def belongs(self, x1, y1, x2, y2, xp, yp):

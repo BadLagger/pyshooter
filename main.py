@@ -8,6 +8,7 @@ from pprint import pprint
 
 BODY_BORDER_COLOR = (200,15,25)
 BODY_BULLET_COLOR = (20,150,25)
+BODY_BUL_CLR = (45, 65, 100)
 
 def draw_body(x1, y1, R):
     global sc
@@ -76,24 +77,20 @@ class Display:
     def get_size(self):
         return self.__size
 
-    def shooter(self, x, y, mx, my):
-        th = threading.Thread(target=self.__shoot_th, args=(x,y,mx,my))
+    def shooter(self, x, y, mx, my, bul_len, bul_width, bul_color):
+        th = threading.Thread(target=self.__shoot_th, args=(x,y,mx,my,bul_len,bul_width,bul_color))
         th.start()
 
-    def __shoot_th(self, x, y, mx, my):
+    def __shoot_th(self, x, y, mx, my, bul_len, bul_width,bul_color):
         bl = Bullet()
-        bl.set_len(8)
+        bl.set_len(bul_len)
         bl.set_bgn_point(x, y)
         bl.set_end_point(mx, my)
         while bl.get_next_pos() != None:
             b_line = bl.get_last_pos()
-            self.draw_line(b_line[0], b_line[1], BODY_BULLET_COLOR, 5)
-            #draw.line(sc, BODY_BULLET_COLOR, b_line[0], b_line[1], 5)
-            #display.update()
+            self.draw_line(b_line[0], b_line[1], bul_color, bul_width)
             time.sleep(0.01)
-            self.hide_line(b_line[0], b_line[1], 5)
-            #draw.line(sc, (0,0,0), b_line[0], b_line[1], 5)
-            #display.update()
+            self.hide_line(b_line[0], b_line[1], bul_width)
 
 # Main Body
 disp = Display(1024, 600)
@@ -110,6 +107,7 @@ obj.set_draw(disp.draw_circle)
 obj.set_hide(disp.hide_circle)
 obj.set_draw_line(disp.draw_line)
 obj.set_hide_line(disp.hide_line)
+obj.set_bullet_prm(4, 3, BODY_BUL_CLR)
 obj.set_shooter(disp.shooter)
 obj.show()
 
