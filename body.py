@@ -60,21 +60,13 @@ class Body:
 
     def move_up(self):
         if self.__draw_line and self.__hide_line and self.__visible:
-            if (self.__x1 - self.__step - self.__R) > 0:
+            if (self.__y1 - self.__step - self.__R) > 0:
                 self.hide()
-                self.__x1 -= self.__step
-                self.__x2 -= self.__step
+                self.__y1 -= self.__step
+                self.__y2 -= self.__step
                 self.show()
 
     def move_down(self):
-        if self.__draw_line and self.__hide_line and self.__visible:
-            if (self.__x1 + self.__step + self.__R) < self.__max_x:
-                self.hide()
-                self.__x1 += self.__step
-                self.__x2 += self.__step
-                self.show()
-
-    def move_right(self):
         if self.__draw_line and self.__hide_line and self.__visible:
             if (self.__y1 + self.__step + self.__R) < self.__max_y:
                 self.hide()
@@ -82,12 +74,20 @@ class Body:
                 self.__y2 += self.__step
                 self.show()
 
+    def move_right(self):
+        if self.__draw_line and self.__hide_line and self.__visible:
+            if (self.__x1 + self.__step + self.__R) < self.__max_x:
+                self.hide()
+                self.__x1 += self.__step
+                self.__x2 += self.__step
+                self.show()
+
     def move_left(self):
         if self.__draw_line and self.__hide_line and self.__visible:
-            if (self.__y1 - self.__step - self.__R) > 0:
+            if (self.__x1 - self.__step - self.__R) > 0:
                 self.hide()
-                self.__y1 -= self.__step
-                self.__y2 -= self.__step
+                self.__x1 -= self.__step
+                self.__x2 -= self.__step
                 self.show()
 
     def shoot(self, mx, my):
