@@ -22,7 +22,7 @@ class Display:
 
     def hide_circle(self, coord, radius, border):
         draw.circle(self.__sc, self.__bg, coord, radius, border)
-        display.update()
+        #display.update()
 
     def draw_line(self, coor_bgn, coor_end, color, bold):
         draw.line(self.__sc, color, coor_bgn, coor_end, bold)
@@ -30,7 +30,7 @@ class Display:
 
     def hide_line(self, coor_bgn, coor_end, bold):
         draw.line(self.__sc, self.__bg, coor_bgn, coor_end, bold)
-        display.update()
+        #display.update()
 
     def get_size(self):
         return self.__size
