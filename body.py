@@ -92,7 +92,7 @@ class Body:
 
     def shoot(self, mx, my):
         if self.__shooter and self.__visible:
-            self.__shooter(self.__x2, self.__y2, mx, my)
+            self.__shooter(self.__y2, self.__x2, mx, my)
 
 
     def belongs(self, x1, y1, x2, y2, xp, yp):

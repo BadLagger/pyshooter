@@ -31,7 +31,6 @@ def shooter(x, y, mx, my):
 
 def shoot_th(x, y, mx, my):
     global sc
-    last_point_x, last_point_y = 0, 0
     bl = Bullet()
     bl.set_len(8)
     bl.set_bgn_point(x, y)
@@ -77,7 +76,24 @@ class Display:
     def get_size(self):
         return self.__size
 
-    #def shooter(self, )
+    def shooter(self, x, y, mx, my):
+        th = threading.Thread(target=self.__shoot_th, args=(x,y,mx,my))
+        th.start()
+
+    def __shoot_th(self, x, y, mx, my):
+        bl = Bullet()
+        bl.set_len(8)
+        bl.set_bgn_point(x, y)
+        bl.set_end_point(mx, my)
+        while bl.get_next_pos() != None:
+            b_line = bl.get_last_pos()
+            self.draw_line(b_line[0], b_line[1], BODY_BULLET_COLOR, 5)
+            #draw.line(sc, BODY_BULLET_COLOR, b_line[0], b_line[1], 5)
+            #display.update()
+            time.sleep(0.01)
+            self.hide_line(b_line[0], b_line[1], 5)
+            #draw.line(sc, (0,0,0), b_line[0], b_line[1], 5)
+            #display.update()
 
 # Main Body
 disp = Display(1024, 600)
@@ -94,7 +110,7 @@ obj.set_draw(disp.draw_circle)
 obj.set_hide(disp.hide_circle)
 obj.set_draw_line(disp.draw_line)
 obj.set_hide_line(disp.hide_line)
-#obj.set_shooter(shooter)
+obj.set_shooter(disp.shooter)
 obj.show()
 
 while 1:
@@ -108,9 +124,9 @@ while 1:
             ks.remove_key(ev.key)
         elif ev.type == MOUSEMOTION:
             obj.rotate(mouse.get_pos())
-        #elif ev.type == MOUSEBUTTONDOWN:
-        #    ms = mouse.get_pos()
-        #    obj.shoot(ms[1], ms[0])
+        elif ev.type == MOUSEBUTTONDOWN:
+            ms = mouse.get_pos()
+            obj.shoot(ms[1], ms[0])
         #else:
         #    pass
     time.sleep(0.005)
