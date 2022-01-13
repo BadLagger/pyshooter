@@ -4,6 +4,10 @@ class BulletCollisionProperty(Enum):
     TRANSPARENT = 1
     STOP = 2
 
+class BulletFlyProperty(Enum):
+    TILL_MOUSE  = 1
+    TILL_SCREEN = 2
+
 class Body:
     def __init__(self, radius, size, color, border_size):
         self.__R  = radius
@@ -25,6 +29,7 @@ class Body:
         self.__backward = None
         self.__last_ms_coord = None
         self.__bul_col_prop = BulletCollisionProperty.TRANSPARENT
+        self.__bul_fly_prop = BulletFlyProperty.TILL_MOUSE
         self.calc_x2_pos(self.__x2, self.__y2)
 
     def set_bullet_collision(self, prop):
@@ -149,7 +154,17 @@ class Body:
 
     def shoot(self, mx, my):
         if self.__shooter and self.__visible:
-            self.__shooter(self.__y2, self.__x2, mx, my, self.bul_len, self.bul_width, self.bul_color)
+            if self.__bul_fly_prop == BulletFlyProperty.TILL_MOUSE:
+                self.__shooter(self.__y2, self.__x2, my, mx, self.bul_len, self.bul_width, self.bul_color)
+            elif self.__bul_fly_prop == BulletFlyProperty.TILL_SCREEN:
+                ax, ay = mx - self.__x2, my - self.__y2
+                #if ax < 0 and ay < 0:
+                #    y = self.__line_equation(ay, )
+
+    # If need to find y than:
+    #  a1 = ay, a2 = ax, c1 = x, c2 = x0, c3 = y0
+    def __line_equation(a1, a2, c1, c2, c3):
+        return (a1 / a2) * (c1 - c2) + c3
 
     def point_belongs(self, coor):
         x = coor[0]

@@ -59,7 +59,7 @@ while 1:
             obj.rotate(mouse.get_pos())
         elif ev.type == MOUSEBUTTONDOWN:
             ms = mouse.get_pos()
-            obj.shoot(ms[1], ms[0])
+            obj.shoot(ms[0], ms[1])
     stuff.update()
     stuff_2.update()
     time.sleep(0.005)
