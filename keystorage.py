@@ -9,9 +9,9 @@ class KeyStorage:
         self.__key_th = threading.Thread(target=self.__thread, args=(self.__key_th_arg,))
         self.__key_th.start()
         self.__key_bind = key_bind
-        self.__collision = self.__key_bind.get("collision")
-        self.__back = self.__key_bind.get("backward")
-        self.__show = self.__key_bind.get("show")
+        #self.__collision = self.__key_bind.get("collision")
+        #self.__back = self.__key_bind.get("backward")
+        #self.__show = self.__key_bind.get("show")
 
     def add_key(self, key):
         self.__key_array.append(key)
@@ -38,16 +38,17 @@ class KeyStorage:
     def __process(self, key):
         kb = self.__key_bind.get(key)
         if kb:
-            if self.__collision:
-                coord = kb(False)
-                if coord:
-                    back = False
-                    for collision in self.__collision:
-                        if collision(coord[0], coord[1], coord[2]):
-                            self.__back(True)
-                            back = True
-                    if back == False:
-                        self.__show()
+            kb["handler"](kb["object"])
+            #if self.__collision:
+            #    coord = kb(False)
+            #    if coord:
+            #        back = False
+            #        for collision in self.__collision:
+            #            if collision(coord[0], coord[1], coord[2]):
+            #                self.__back(True)
+            #                back = True
+            #        if back == False:
+            #            self.__show()
 
-            else:
-                print(kb())
+            #else:
+            #    print(kb())

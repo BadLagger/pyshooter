@@ -21,13 +21,10 @@ stuff_2 = Body(30, disp.get_size(), BODY_BORDER_COLOR, 4)
 disp.add_obj(stuff)
 disp.add_obj(stuff_2)
 key_bindings = {
-    K_UP: obj.move_up,
-    K_DOWN: obj.move_down,
-    K_LEFT: obj.move_left,
-    K_RIGHT: obj.move_right,
-    "collision": [stuff.collision,stuff_2.collision],
-    "backward": obj.move_back,
-    "show": obj.show
+    K_UP: {"object": obj, "handler": disp.mover_up},
+    K_DOWN: {"object": obj, "handler": disp.mover_down},
+    K_LEFT: {"object": obj, "handler": disp.mover_left},
+    K_RIGHT: {"object": obj, "handler": disp.mover_right},
 }
 ks = KeyStorage(key_bindings)
 obj.set_draw(disp.draw_circle)
@@ -48,8 +45,6 @@ stuff_2.set_hide(disp.hide_circle)
 stuff_2.set_pos(400, 150)
 stuff_2.set_bullet_collision(BulletCollisionProperty.STOP)
 stuff_2.show()
-
-
 
 while 1:
     for ev in event.get():

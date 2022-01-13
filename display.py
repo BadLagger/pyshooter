@@ -47,6 +47,17 @@ class Display:
         else:
             self.__ojects.append(obj)
 
+    def mover_up(self, obj):
+        self.__mover(obj, obj.move_up)
+
+    def mover_down(self, obj):
+        self.__mover(obj, obj.move_down)
+
+    def mover_right(self, obj):
+        self.__mover(obj, obj.move_right)
+
+    def mover_left(self, obj):
+        self.__mover(obj, obj.move_left)
 
     def __shoot_th(self, x, y, mx, my, bul_len, bul_width,bul_color):
         bl = Bullet()
@@ -67,3 +78,11 @@ class Display:
                 self.draw_line(b_line[0], b_line[1], bul_color, bul_width)
                 time.sleep(0.01)
                 self.hide_line(b_line[0], b_line[1], bul_width)
+
+    def __mover(self, obj, move):
+        next_pos = move(False)
+        for next_object in self.__ojects:
+            if next_object.collision(next_pos[0], next_pos[1], next_pos[2]):
+                obj.move_back(True)
+                return
+        obj.show()
