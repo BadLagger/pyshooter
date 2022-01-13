@@ -1,5 +1,6 @@
 from pygame import *
 from bullet import Bullet
+from body import BulletCollisionProperty
 import threading
 import time
 
@@ -8,6 +9,7 @@ class Display:
         self.__size = (width, heigh)
         self.__bg = (0,0,0)
         self.__sc = display.set_mode((width, heigh))
+        self.__ojects = []
 
     def set_bg(self, rgb):
         self.__bg = rgb
@@ -39,13 +41,29 @@ class Display:
         th = threading.Thread(target=self.__shoot_th, args=(x,y,mx,my,bul_len,bul_width,bul_color))
         th.start()
 
+    def add_obj(self, obj):
+        if obj in self.__ojects:
+            raise ValueError("Try to register duplicate object")
+        else:
+            self.__ojects.append(obj)
+
+
     def __shoot_th(self, x, y, mx, my, bul_len, bul_width,bul_color):
         bl = Bullet()
         bl.set_len(bul_len)
         bl.set_bgn_point(x, y)
         bl.set_end_point(mx, my)
         while bl.get_next_pos() != None:
+            bul_prop = BulletCollisionProperty.TRANSPARENT
             b_line = bl.get_last_pos()
-            self.draw_line(b_line[0], b_line[1], bul_color, bul_width)
-            time.sleep(0.01)
-            self.hide_line(b_line[0], b_line[1], bul_width)
+            for obj in self.__ojects:
+                if obj.point_belongs(b_line[0]) or obj.point_belongs(b_line[1]):
+                    bul_prop = obj.get_bullet_collision()
+                    if bul_prop != BulletCollisionProperty.TRANSPARENT:
+                        break
+            if bul_prop == BulletCollisionProperty.STOP:
+                bl.destroy()
+            else:
+                self.draw_line(b_line[0], b_line[1], bul_color, bul_width)
+                time.sleep(0.01)
+                self.hide_line(b_line[0], b_line[1], bul_width)

@@ -1,3 +1,9 @@
+from enum import Enum
+
+class BulletCollisionProperty(Enum):
+    TRANSPARENT = 1
+    STOP = 2
+
 class Body:
     def __init__(self, radius, size, color, border_size):
         self.__R  = radius
@@ -17,7 +23,18 @@ class Body:
         self.__hide_line = None
         self.__shooter = None
         self.__backward = None
+        self.__last_ms_coord = None
+        self.__bul_col_prop = BulletCollisionProperty.TRANSPARENT
         self.calc_x2_pos(self.__x2, self.__y2)
+
+    def set_bullet_collision(self, prop):
+        if prop in BulletCollisionProperty:
+            self.__bul_col_prop = prop
+        else:
+            raise ValueError('Bad BulletCollisionProperty')
+
+    def get_bullet_collision(self):
+        return self.__bul_col_prop
 
     def set_pos(self, x, y):
         self.__x1 = x
@@ -70,6 +87,7 @@ class Body:
     def rotate(self, coord):
         if self.__draw_line and self.__hide_line and self.__visible:
             self.hide()
+            self.__last_ms_coord = coord
             self.calc_x2_pos(coord[0], coord[1])
             self.show()
 
@@ -79,6 +97,8 @@ class Body:
                 self.hide()
                 self.__y1 -= self.__step
                 self.__y2 -= self.__step
+                if self.__draw_line:
+                    self.calc_x2_pos(self.__last_ms_coord[0], self.__last_ms_coord[1])
                 if show_now:
                     self.show()
                 self.__backward = self.move_down
@@ -90,6 +110,8 @@ class Body:
                 self.hide()
                 self.__y1 += self.__step
                 self.__y2 += self.__step
+                if self.__draw_line:
+                    self.calc_x2_pos(self.__last_ms_coord[0], self.__last_ms_coord[1])
                 if show_now:
                     self.show()
                 self.__backward = self.move_up
@@ -101,6 +123,8 @@ class Body:
                 self.hide()
                 self.__x1 += self.__step
                 self.__x2 += self.__step
+                if self.__draw_line:
+                    self.calc_x2_pos(self.__last_ms_coord[0], self.__last_ms_coord[1])
                 if show_now:
                     self.show()
                 self.__backward = self.move_left
@@ -112,6 +136,8 @@ class Body:
                 self.hide()
                 self.__x1 -= self.__step
                 self.__x2 -= self.__step
+                if self.__draw_line:
+                    self.calc_x2_pos(self.__last_ms_coord[0], self.__last_ms_coord[1])
                 if show_now:
                     self.show()
                 self.__backward = self.move_right
@@ -125,6 +151,13 @@ class Body:
         if self.__shooter and self.__visible:
             self.__shooter(self.__y2, self.__x2, mx, my, self.bul_len, self.bul_width, self.bul_color)
 
+    def point_belongs(self, coor):
+        x = coor[0]
+        y = coor[1]
+        l = ((x - self.__x1) ** 2 + (y - self.__y1) ** 2 ) ** 0.5
+        if l <= self.__R:
+            return True
+        return False
 
     def belongs(self, x1, y1, x2, y2, xp, yp):
         if xp >= x1 and xp <= x2 and yp >= y1 and yp <= y2:

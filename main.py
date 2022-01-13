@@ -1,6 +1,7 @@
 from pygame import *
 import time
 from body import Body
+from body import BulletCollisionProperty
 from bullet import Bullet
 from keystorage import KeyStorage
 from display import Display
@@ -17,6 +18,8 @@ disp.set_bg(DISPLAY_BG_COLOR)
 obj = Body(25, disp.get_size(), BODY_BORDER_COLOR, 2)
 stuff = Body(30, disp.get_size(), BODY_BORDER_COLOR, 4)
 stuff_2 = Body(30, disp.get_size(), BODY_BORDER_COLOR, 4)
+disp.add_obj(stuff)
+disp.add_obj(stuff_2)
 key_bindings = {
     K_UP: obj.move_up,
     K_DOWN: obj.move_down,
@@ -43,7 +46,10 @@ stuff.show()
 stuff_2.set_draw(disp.draw_circle)
 stuff_2.set_hide(disp.hide_circle)
 stuff_2.set_pos(400, 150)
+stuff_2.set_bullet_collision(BulletCollisionProperty.STOP)
 stuff_2.show()
+
+
 
 while 1:
     for ev in event.get():

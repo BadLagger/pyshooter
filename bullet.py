@@ -62,5 +62,8 @@ class Bullet:
         self.__path_len = None
         return None
 
+    def destroy(self):
+        self.__bgn_px = self.__end_px
+
     def get_last_pos(self):
         return self.__b_line
