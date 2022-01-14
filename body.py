@@ -32,6 +32,15 @@ class Body:
         self.__bul_fly_prop = BulletFlyProperty.TILL_MOUSE
         self.calc_x2_pos(self.__x2, self.__y2)
 
+    def set_bullet_fly(self, prop):
+        if prop in BulletFlyProperty:
+            self.__bul_fly_prop = prop
+        else:
+            raise ValueError('Bad BulletFlyProperty')
+
+    def get_bullet_fly(self):
+        return self.__bul_fly_prop
+
     def set_bullet_collision(self, prop):
         if prop in BulletCollisionProperty:
             self.__bul_col_prop = prop
@@ -157,13 +166,49 @@ class Body:
             if self.__bul_fly_prop == BulletFlyProperty.TILL_MOUSE:
                 self.__shooter(self.__y2, self.__x2, my, mx, self.bul_len, self.bul_width, self.bul_color)
             elif self.__bul_fly_prop == BulletFlyProperty.TILL_SCREEN:
-                ax, ay = mx - self.__x2, my - self.__y2
-                #if ax < 0 and ay < 0:
-                #    y = self.__line_equation(ay, )
+                ax, ay = self.__x2 - mx, self.__y2 - my
+                if ax < 0:
+                    print('Direction to Ox')
+                    x = self.__line_equation(ax, ay, 0, self.__y2, self.__x2)
+                    if x < 0:
+                        print('cross y')
+                        my = self.__line_equation(ay, ax, self.__max_x, self.__x2, self.__y2)
+                        mx = self.__max_x
+                    elif x > self.__max_x:
+                        print('cross max y')
+                        my = self.__line_equation(ay, ax, self.__max_x, self.__x2, self.__y2)
+                        mx = self.__max_x
+                    else:
+                        print('not cross y: ', ay)
+                        if ay < 0:
+                            my = self.__max_y
+                            mx = self.__line_equation(ax, ay, self.__max_y, self.__y2, self.__x2)
+                        else:
+                            my = 0
+                            mx = x
+                else:
+                    print('Direction from Ox')
+                    y = self.__line_equation(ay, ax, 0, self.__x2, self.__y2)
+                    if y > self.__max_y:
+                        x = self.__line_equation(ax, ay, self.__max_y, self.__y2, self.__x2)
+                        if x > self.__max_x:
+                            print('cross max y')
+                            mx = self.__max_x
+                            my = self.__line_equation(ay, ax, self.__max_y, self.__x2, self.__y2)
+                        else:
+                            print('cross max x')
+                            mx = x
+                            my = self.__max_y
+                    else:
+                        print('cross y')
+                        mx = 0
+                        my = y
+                print(' ')
+                self.__shooter(self.__y2, self.__x2, my, mx, self.bul_len, self.bul_width, self.bul_color)
 
     # If need to find y than:
     #  a1 = ay, a2 = ax, c1 = x, c2 = x0, c3 = y0
-    def __line_equation(a1, a2, c1, c2, c3):
+    def __line_equation(self, a1, a2, c1, c2, c3):
         return (a1 / a2) * (c1 - c2) + c3
 
     def point_belongs(self, coor):

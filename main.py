@@ -2,6 +2,7 @@ from pygame import *
 import time
 from body import Body
 from body import BulletCollisionProperty
+from body import BulletFlyProperty
 from bullet import Bullet
 from keystorage import KeyStorage
 from display import Display
@@ -33,6 +34,7 @@ obj.set_draw_line(disp.draw_line)
 obj.set_hide_line(disp.hide_line)
 obj.set_shooter(disp.shooter)
 obj.set_bullet_prm(4, 3, BODY_BUL_CLR)
+obj.set_bullet_fly(BulletFlyProperty.TILL_SCREEN)
 obj.show()
 
 stuff.set_draw(disp.draw_circle)
