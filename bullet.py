@@ -37,12 +37,16 @@ class Bullet:
         self.__end_py = py
 
     def get_next_pos(self):
-        if self.__bgn_px != self.__end_px:
+        if self.__bgn_px != self.__end_px or self.__bgn_py != self.__end_py:
             ax = self.__end_px - self.__bgn_px
             ay = self.__end_py - self.__bgn_py
-            a = ay / ax
-            x = ((self.__b_len * ax) / ((ax ** 2 + ay ** 2) ** 0.5 )) + self.__bgn_px
-            y = a * (x - self.__bgn_px) + self.__bgn_py
+            if ax != 0:
+                a = ay / ax
+                x = ((self.__b_len * ax) / ((ax ** 2 + ay ** 2) ** 0.5 )) + self.__bgn_px
+                y = a * (x - self.__bgn_px) + self.__bgn_py
+            else:
+                x = (self.__bgn_px + self.__b_len) if self.__bgn_px < self.__end_px else (self.__bgn_px - self.__b_len)
+                y = self.__bgn_py
             self.__b_line = [(self.__bgn_py, self.__bgn_px),(y, x)]
             if ax >= 0:
                 if x < self.__end_px:
@@ -63,7 +67,7 @@ class Bullet:
         return None
 
     def destroy(self):
-        self.__bgn_px = self.__end_px
+        self.__bgn_px, self.__bgn_py = self.__end_px, self.__end_py
 
     def get_last_pos(self):
         return self.__b_line

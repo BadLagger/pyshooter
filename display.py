@@ -14,6 +14,7 @@ class Display:
     def set_bg(self, rgb):
         self.__bg = rgb
         self.__sc.fill(self.__bg)
+        display.update()
 
     def get_bg(self):
         return self.__bg
