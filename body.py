@@ -19,7 +19,7 @@ class Body:
         self.__max_y = size[1]
         self.__x2 = 0
         self.__y2 = 0
-        self.__step = 10
+        self.__step = 1
         self.__visible = False
         self.__draw = None
         self.__hide = None

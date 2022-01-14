@@ -10,6 +10,9 @@ class KeyStorage:
         self.__key_th.start()
         self.__key_bind = key_bind
 
+    def get_esc(self):
+        return self.__key_th_arg["esc"]
+
     def add_key(self, key):
         self.__key_array.append(key)
         self.__process(key)
@@ -30,7 +33,7 @@ class KeyStorage:
     def __thread(self, args):
         while args["esc"] == False:
             self.__check_keys()
-            time.sleep(0.1)
+            time.sleep(0.005)
 
     def __process(self, key):
         kb = self.__key_bind.get(key)

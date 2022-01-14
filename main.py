@@ -8,6 +8,15 @@ from bullet import Bullet
 from keystorage import KeyStorage
 from display import Display
 from pprint import pprint
+import threading
+
+
+def fps_draw(esc):
+    global fps_last
+    global disp
+    while(esc() == False):
+        disp.show_text("FPS: %s" % int(fps_last))
+        time.sleep(1)
 
 BODY_BORDER_COLOR = (0,0,0)
 BODY_BUL_CLR = (200, 200, 0)
@@ -50,6 +59,9 @@ stuff_2.set_bullet_collision(BulletCollisionProperty.STOP)
 stuff_2.show()
 
 clk = pgtime.Clock()
+fps_last = 0
+fps_draw_th = threading.Thread(target=fps_draw, args=(ks.get_esc,))
+fps_draw_th.start()
 
 while 1:
     for ev in event.get():
@@ -67,6 +79,10 @@ while 1:
             obj.shoot(ms[0], ms[1])
     stuff.update()
     stuff_2.update()
-    disp.show_text("FPS: %s" % int(clk.get_fps()))
+    fps_last = clk.get_fps()
+    #    disp.show_text("FPS: %s" % int(fps_last))
+    #    count = 0
+    #else:
+    #    count += 1
     #time.sleep(0.005)
     clk.tick()
