@@ -1,4 +1,5 @@
 from pygame import *
+from pygame import time as pgtime
 import time
 from body import Body
 from body import BulletCollisionProperty
@@ -48,6 +49,8 @@ stuff_2.set_pos(400, 150)
 stuff_2.set_bullet_collision(BulletCollisionProperty.STOP)
 stuff_2.show()
 
+clk = pgtime.Clock()
+
 while 1:
     for ev in event.get():
         if ev.type == QUIT:
@@ -64,4 +67,6 @@ while 1:
             obj.shoot(ms[0], ms[1])
     stuff.update()
     stuff_2.update()
-    time.sleep(0.005)
+    disp.show_text("FPS: %s" % int(clk.get_fps()))
+    #time.sleep(0.005)
+    clk.tick()

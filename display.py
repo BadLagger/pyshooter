@@ -10,6 +10,12 @@ class Display:
         self.__bg = (0,0,0)
         self.__sc = display.set_mode((width, heigh))
         self.__ojects = []
+        font.init()
+        self.__fpsFont = font.SysFont('Comic Sans MS', 30)
+
+    def show_text(self, text, pos=(0,0), color=(0,0,0)):
+        draw.rect(self.__sc, self.__bg, (0,0, 200, 50))
+        self.__sc.blit(self.__fpsFont.render(text, False, color), pos)
 
     def set_bg(self, rgb):
         self.__bg = rgb
