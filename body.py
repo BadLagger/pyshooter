@@ -1,5 +1,7 @@
 from enum import Enum
 
+BODY_COUNTER = 0
+
 class BulletCollisionProperty(Enum):
     TRANSPARENT = 1
     STOP = 2
@@ -8,8 +10,15 @@ class BulletFlyProperty(Enum):
     TILL_MOUSE  = 1
     TILL_SCREEN = 2
 
+class BodyLifeProperty(Enum):
+    IMMORTAL = 1
+    MORTAL = 2
+
 class Body:
-    def __init__(self, radius, size, color, border_size):
+    def __init__(self, radius, size, color, border_size, name=None):
+        global BODY_COUNTER
+        BODY_COUNTER += 1
+        self.__name = name if name != None else ("Body%d" % BODY_COUNTER)
         self.__R  = radius
         self.__color = color
         self.__br_size = border_size
@@ -30,7 +39,38 @@ class Body:
         self.__last_ms_coord = None
         self.__bul_col_prop = BulletCollisionProperty.TRANSPARENT
         self.__bul_fly_prop = BulletFlyProperty.TILL_MOUSE
+        self.__life_prop  = BodyLifeProperty.IMMORTAL
+        self.__life_level = 0
         self.calc_x2_pos(self.__x2, self.__y2)
+
+    #def __del__(self):
+    #    global BODY_COUNTER
+    #    print('Delete %s' % self.__name)
+    #    BODY_COUNTER -= 1
+
+    #def should_kill(self):
+    #    return self.__kill
+
+    def set_life(self, life_prop, life_lvl=0):
+        if life_prop in BodyLifeProperty:
+            self.__life_prop = life_prop
+            self.__life_level = life_lvl
+        else:
+            raise ValueError('Bad BodyLifeProperty')
+
+    def get_life_property(self):
+        return self.__life_prop
+
+    def get_life_level(self):
+        return self.__life_level
+
+    # if return False - than life lvl <= 0
+    def make_damage(self, dmg_lvl = 1):
+        if self.__life_prop == BodyLifeProperty.MORTAL:
+            self.__life_level -= dmg_lvl
+            if self.__life_level <= 0:
+                return False
+        return True
 
     def set_bullet_fly(self, prop):
         if prop in BulletFlyProperty:

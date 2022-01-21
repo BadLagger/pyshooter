@@ -77,14 +77,23 @@ class Display:
             for obj in self.__ojects:
                 if obj.point_belongs(b_line[0]) or obj.point_belongs(b_line[1]):
                     bul_prop = obj.get_bullet_collision()
-                    if bul_prop != BulletCollisionProperty.TRANSPARENT:
-                        break
+                    if obj.make_damage() == False:
+                        obj.hide()
+                        self.__ojects.remove(obj)
+                    break
+                    #if bul_prop != BulletCollisionProperty.TRANSPARENT:
+                    #    break
             if bul_prop == BulletCollisionProperty.STOP:
                 bl.destroy()
             else:
                 self.draw_line(b_line[0], b_line[1], bul_color, bul_width)
                 time.sleep(0.01)
                 self.hide_line(b_line[0], b_line[1], bul_width)
+
+            #if dead_obj:
+            #    self.__ojects.remove(dead_obj)
+            #    del dead_obj
+                #dead_obj.__del__()
 
     def __mover(self, obj, move):
         next_pos = move(False)
